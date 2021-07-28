@@ -1,0 +1,52 @@
+{
+    "name": "ssl-check-dashboard",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev:client": "nuxt",
+        "dev:server": "nest start --debug --watch",
+        "build": "nest build && nuxt build",
+        "start": "nuxt start",
+        "generate": "nuxt generate",
+        "lint:js": "eslint --ext \".ts,.js,.vue\" --ignore-path .gitignore .",
+        "lint": "npm run lint:js",
+        "format": "prettier --write \"server/**/*.ts\" \"client/**/*.(js|ts|vue)\""
+    },
+    "dependencies": {
+        "@nestjs-addons/in-memory-db": "^3.0.3",
+        "@nestjs/common": "^8.0.0",
+        "@nestjs/config": "^1.0.0",
+        "@nestjs/core": "^8.0.0",
+        "@nestjs/platform-express": "^8.0.0",
+        "@nestjs/platform-socket.io": "^8.0.0",
+        "@nestjs/websockets": "^8.0.0",
+        "@nuxtjs/axios": "^5.13.6",
+        "@types/socket.io": "^3.0.2",
+        "core-js": "^3.15.1",
+        "cron": "^1.8.2",
+        "nuxt": "^2.15.7",
+        "nuxt-property-decorator": "^2.9.1",
+        "nuxt-socket-io": "^1.1.18",
+        "reflect-metadata": "^0.1.13",
+        "rxjs": "^7.2.0",
+        "socket.io-client": "^4.1.3",
+        "ssl-checker": "^2.0.7",
+        "vuex-class-component": "^2.3.5"
+    },
+    "devDependencies": {
+        "@babel/eslint-parser": "^7.14.7",
+        "@nestjs/cli": "^8.0.2",
+        "@nestjs/schematics": "^8.0.0",
+        "@nuxt/types": "^2.15.7",
+        "@nuxt/typescript-build": "^2.1.0",
+        "@nuxtjs/eslint-config-typescript": "^6.0.1",
+        "@nuxtjs/eslint-module": "^3.0.2",
+        "@nuxtjs/tailwindcss": "^4.2.0",
+        "eslint": "^7.29.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-nuxt": "^2.0.0",
+        "eslint-plugin-vue": "^7.12.1",
+        "postcss": "^8.3.5",
+        "prettier": "^2.3.2"
+    }
+}
