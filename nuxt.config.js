@@ -25,7 +25,7 @@ const config = async () => ({
     },
 
     serverMiddleware: isProd
-        ? [{ path: '/api', handler: await bootstrap() }]
+        ? [{ path: '/api', prefix: true, handler: await bootstrap() }]
         : [],
 
     // Global CSS: https://go.nuxtjs.dev/config-css
@@ -61,8 +61,9 @@ const config = async () => ({
     io: {
         sockets: [
             {
-                name: 'sslcache',
-                url: `http://localhost:${isProd ? 3000 : 4000}/api/ws`,
+                default: true,
+                url: `http://localhost:${isProd ? location.host : 4000}`,
+                // url: `http://localhost:4000`,
             },
         ],
     },

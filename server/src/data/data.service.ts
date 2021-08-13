@@ -42,7 +42,7 @@ export class DataService {
                 const iterator = this.currentState.queue.values();
                 const hostnameToProcess = iterator.next().value;
                 this.removeFromQueue(hostnameToProcess);
-                this.logger.debug(hostnameToProcess, 'hostname checked');
+                this.logger.log(`hostname checked: ${hostnameToProcess}`);
 
                 let result;
 

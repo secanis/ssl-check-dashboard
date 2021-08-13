@@ -8,7 +8,7 @@
             :errors="getErrors"
         />
         <div v-if="socketState !== 'connected'">
-            <socket-status :status="socketStatus"></socket-status>
+            <socket-status :status="`${socketStatus}`"></socket-status>
         </div>
         <SslList :sslData="getData" class="flex-grow" />
         <Footer />
@@ -55,6 +55,7 @@ export default class Index extends Vue {
         const socket = this.$nuxtSocket({
             name: 'sslcache',
             statusProp: 'socketStatus',
+            path: '/api/ws',
             vuex: {
                 actions: [
                     {
@@ -68,7 +69,7 @@ export default class Index extends Vue {
                     },
                 ],
             },
-        });
+        } as any); // sadly type is not correctly expanded
 
         socket.on('connect', () => this.setSocketState('connected'));
         socket.on('disconnect', async () => {
