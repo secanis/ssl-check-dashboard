@@ -15,14 +15,7 @@
             "~/*": ["./*"],
             "@/*": ["./*"]
         },
-        "types": [
-            "@nuxt/types",
-            "@nuxtjs/axios",
-            "@types/node",
-            "@types/jest",
-            "@types/supertest",
-            "nuxt-socket-io"
-        ]
+        "types": ["@types/node"]
     },
-    "exclude": ["node_modules", ".nuxt", ".nest", "server"]
+    "exclude": ["node_modules", ".svelte", ".nest", "server"]
 }
