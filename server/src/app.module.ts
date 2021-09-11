@@ -1,14 +1,14 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-
 import configuration from './environment/environment';
-import { DashboardController } from './controllers/dashboard/dashboard.controller';
+
+import { AppController } from './app.controller';
+import { HealthController } from './controllers/health/health.controller';
+import { AppService } from './app.service';
 import { DataModule } from './data/data.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
     imports: [
@@ -22,7 +22,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
         }),
         DataModule,
     ],
-    controllers: [AppController, DashboardController],
+    controllers: [AppController, HealthController],
     providers: [AppService],
     exports: [AppService],
 })
