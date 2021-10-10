@@ -2,13 +2,14 @@ import { io } from 'socket.io-client';
 import App from './App.svelte';
 import { data, sslErrors, queuestate } from './shared/store';
 import { State, SslError, SslCheck } from '../../server/src/types';
+import { WS_URL } from './shared/url';
 
 const app = new App({
     target: document.body,
     props: {},
 });
 
-const socket = io('ws://localhost:3000', { path: '/api/ws' });
+const socket = io(WS_URL, { path: '/api/ws' });
 
 socket.emit('events');
 
