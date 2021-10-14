@@ -15,7 +15,7 @@ const HOST_LIST: string[] = process.env.HOST_LIST
 const ENV = process.env.NODE_ENV;
 let config: scdEnvironment = {
     hosts: HOST_LIST,
-    cron: process.env.CRON || '0 */2 * * *',
+    cron: process.env.CRON || '0 */12 * * *',
     production: ENV === 'production',
     port: 3000,
     svelte: {

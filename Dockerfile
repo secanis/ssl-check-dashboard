@@ -12,7 +12,7 @@ RUN npm run build:server
 RUN npm run build:client
 
 # final image build
-FROM node:alpine
+FROM node:slim
 LABEL maintainer=support@secanis.ch
 
 WORKDIR /app
@@ -25,8 +25,9 @@ COPY --from=builder /nest/.svelte ./public
 
 # COPY healthcheck.js .
 
-RUN adduser -D myuser \
-    && apk add --no-cache openssl \
+RUN useradd -ms /bin/bash myuser \
+    && apt-get update && apt-get install -y --no-install-recommends openssl \
+    && rm -rf /var/lib/apt/lists/* \
     && npm install --production
 USER myuser
 

@@ -10,7 +10,7 @@ You can directly pull the official Docker image from Docker Hub.
 
 ``` bash
 docker pull secanis/ssl-check-dashboard
-docker run -e CRON="* * * * *" -e HOST_LIST=secanis.ch,gemeindeverzeichnis.ch secanis/ssl-check-dashboard
+docker run -e CRON="0 */12 * * *" -e HOST_LIST=secanis.ch,gemeindeverzeichnis.ch secanis/ssl-check-dashboard
 ```
 
 *Note: Currently there is no internal auth system, if you want to protect the information (normally this is anyway public), you have to use an ingress proxy or other reverse proxy in front of this app.*
@@ -20,7 +20,7 @@ docker run -e CRON="* * * * *" -e HOST_LIST=secanis.ch,gemeindeverzeichnis.ch se
 | Variable             | Default | Description                 |
 | -------------------- | ---- | --------------------------- |
 | HOST_LIST | none  | comma separated list of domain names (example: secanis.ch,gemeindeverzeichnis.ch) |
-| CRON | 0 */2 * * *  | Cron job definition to check the domains again |
+| CRON | 0 */12 * * *  | Cron job definition to check the domains again |
 
 ## API
 
