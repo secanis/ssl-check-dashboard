@@ -1,6 +1,12 @@
 import { writable, Writable } from 'svelte/store';
 
-import type { SslError, SslCheck, State } from '../../../server/src/types';
+import { API_URL } from './url';
+import type {
+    SslError,
+    SslCheck,
+    State,
+    UserStore,
+} from '../../../server/src/types';
 
 export const data: Writable<SslCheck[]> = writable([]);
 export const sslErrors: Writable<SslError[]> = writable([]);
@@ -9,3 +15,39 @@ export const queuestate: Writable<State> = writable({
     queue: -1,
     connected: false,
 });
+
+// user
+const emptyUserStore: UserStore = { token: '', error: '' };
+const token = sessionStorage.token;
+export const user = (function () {
+    const { subscribe, set } = writable(
+        token ? { token, error: '' } : emptyUserStore
+    );
+    subscribe(({ token }) => (sessionStorage.token = token || ''));
+    return {
+        subscribe,
+        signout: (): undefined => {
+            set(emptyUserStore);
+            return;
+        },
+        signin: async (username: string, password: string) => {
+            const res = await fetch(`${API_URL}/api/auth/login`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    username,
+                    password,
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const json = await res.json();
+            if (res.ok) {
+                set({ token: json.access_token, error: '' });
+            } else {
+                set({ token: '', error: json.message });
+            }
+        },
+    };
+})();

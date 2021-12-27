@@ -1,9 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UseGuards } from '@nestjs/common';
 import { InMemoryDBService } from '@nestjs-addons/in-memory-db';
 import sslChecker from 'ssl-checker';
 
 import { Server } from 'socket.io';
 import { SslCheck, SslCheckState, SslError } from '../types';
+import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
 export class DataService {

@@ -1,5 +1,7 @@
 <script lang="ts">
-    import Status from "./Status.svelte";
+    import Status from './Status.svelte';
+    import LogoutIcon from '../icons/logout-icon.svelte';
+    import { user } from '../shared/store.js';
 </script>
 
 <nav
@@ -52,34 +54,19 @@
             >
                 SSL Dashboard
             </a>
-            <button
-                class="
-                cursor-pointer
-                text-xl
-                leading-none
-                px-3
-                py-1
-                border border-solid border-transparent
-                rounded
-                bg-transparent
-                block
-                lg:hidden
-                outline-none
-                focus:outline-none
-            "
-                type="button"
-            >
-                <span class="block relative w-6 h-px rounded-sm bg-white" />
-                <span
-                    class="block relative w-6 h-px rounded-sm bg-white mt-1"
-                />
-                <span
-                    class="block relative w-6 h-px rounded-sm bg-white mt-1"
-                />
-            </button>
         </div>
         <div class="lg:flex flex-grow items-center" id="example-navbar-warning">
             <ul class="flex flex-col lg:flex-row list-none ml-auto">
+                <li class="nav-item">
+                    <button
+                        type="button"
+                        title="Logout"
+                        on:click={user.signout}
+                        class="bg-gray-700 text-white cursor-pointer relative rounded-full p-2 mr-3 focus:outline-none"
+                    >
+                        <LogoutIcon />
+                    </button>
+                </li>
                 <li class="nav-item">
                     <Status />
                 </li>

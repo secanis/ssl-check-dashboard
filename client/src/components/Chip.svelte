@@ -5,7 +5,7 @@
 
 <span
     class="
-    inline-flex
+    inline-block
     items-center
     rounded-full
     bg-gray-100
@@ -15,6 +15,8 @@
     mt-2
     ml-2
     mb-8
+    truncate
+    max-w-xs
 "
     {title}
 >

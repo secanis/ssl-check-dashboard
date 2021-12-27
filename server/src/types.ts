@@ -29,3 +29,15 @@ export interface SslError {
     host: string;
     message: string;
 }
+
+export interface UserStore {
+    token: string;
+    error: string;
+}
+
+export type User = {
+    userId: string;
+    username: string;
+    password: string;
+    salt?: string;
+};

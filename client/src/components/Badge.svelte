@@ -1,20 +1,12 @@
 <script lang="ts">
-    export let success: boolean;
+    export let success: boolean = false;
     export let errorColor: string = 'red';
 
-    function getColor(): string {
-        return errorColor || 'red';
+    function getColorClass(opacity: number): string {
+        return 'bg-' + errorColor + '-' + opacity;
     }
 </script>
 
-<div
-    class="h-4 w-4 m rounded-full m-1 {success
-        ? 'bg-green-100'
-        : 'bg-' + getColor() + '-100'}"
->
-    <div
-        class="h-2 w-2 rounded-full m-1 {success
-            ? 'bg-green-500'
-            : 'bg-' + getColor() + '-500'}"
-    />
+<div class={(success ? 'bg-green-100' : getColorClass(100)) + ' h-4 w-4 m rounded-full m-1'}>
+    <div class={(success ? 'bg-green-500' : getColorClass(500)) + ' h-2 w-2 rounded-full m-1'}/>
 </div>

@@ -1,17 +1,38 @@
 <script lang="ts">
-    import { State } from '../../../server/src/types';
+    import { onDestroy } from 'svelte';
+    import { SslError, State } from '../../../server/src/types';
 
     import Badge from './Badge.svelte';
     import Chip from './Chip.svelte';
+    import BellIcon from '../icons/bell-icon.svelte';
     import { sslErrors, queuestate } from '../shared/store';
 
     let dropdownOpen = false;
 
-    function getPulseColor(): string {
-        if ($sslErrors.length > 0) return 'bg-red-500 animate-pulse';
-        return $queuestate.queue > 0 || $queuestate.processing > 0
-            ? 'bg-blue-500 animate-pulse'
-            : '';
+    let qState: number;
+    let pState: number;
+    let generalState: State;
+    let textColor: string;
+    let pulseColor: string;
+    let errors: SslError[] = [];
+
+    const errorSubs = sslErrors.subscribe((e) => {
+        pulseColor = getPulseColor(e);
+        errors = e;
+    });
+
+    const queueSubs = queuestate.subscribe((i) => {
+        qState = i.queue;
+        pState = i.processing;
+        generalState = i;
+        textColor = getTextColor(i);
+    });
+
+    function getPulseColor(e: SslError[]): string {
+        if (e.length > 0) return 'bg-red-200 animate-pulse';
+        return pState > 0 || qState > 0
+            ? 'bg-blue-200 animate-pulse'
+            : 'bg-gray-700';
     }
 
     function toggleDropdown() {
@@ -22,28 +43,25 @@
         dropdownOpen = false;
     }
 
-    function calculateCurrentTotalStatus(state: State): string {
-        if (state.connected && state.queue === 0 && state.processing === 0) return 'text-white';
-        if (state.connected && state.queue === 0 && state.processing > 0) return 'text-blue-500 animate-pulse';
-        return 'text-red-500 animate-pulse';
+    function getTextColor(state: State): string {
+        if (errors && errors.length > 0) return 'text-red-500';
+        if (state.connected && state.queue === 0 && state.processing === 0)
+            return 'text-white';
+        return 'text-blue-500';
     }
+
+    onDestroy(queueSubs);
+    onDestroy(errorSubs);
 </script>
 
 <div class="relative">
     <button
         on:click={toggleDropdown}
-        class="relative rounded-full p-2 focus:outline-none {getPulseColor()}"
+        class={pulseColor + ' relative rounded-full p-2 focus:outline-none'}
     >
-        <svg
-            class="h-5 w-5 {calculateCurrentTotalStatus($queuestate)}"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-        >
-            <path
-                d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"
-            />
-        </svg>
+        <span class="h-5 w-5 {textColor}">
+            <BellIcon />
+        </span>
     </button>
     {#if dropdownOpen}
         <div
@@ -70,7 +88,7 @@
                 <span
                     class="flex items-center px-4 py-3 hover:bg-gray-100 -mx-2"
                 >
-                    <Badge success={!!$queuestate.connected} />
+                    <Badge success={!!generalState.connected} />
                     <p
                         class="
                         text-gray-600 text-sm
@@ -81,7 +99,7 @@
                     "
                     >
                         <span class="font-bold"
-                            >{$queuestate.connected
+                            >{generalState.connected
                                 ? 'Conntected'
                                 : 'Disconnected'}</span
                         >
@@ -91,10 +109,7 @@
                     href="#"
                     class="flex items-center px-4 py-3 hover:bg-gray-100 -mx-2"
                 >
-                    <Badge
-                        success={$queuestate.queue === 0}
-                        errorColor="blue"
-                    />
+                    <Badge success={qState === 0} errorColor="blue" />
                     <p
                         class="
                         text-gray-600 text-sm
@@ -105,16 +120,13 @@
                     "
                     >
                         <span class="font-bold">Queue</span>
-                        <span>{$queuestate.queue} items</span>
+                        <span>{qState} items</span>
                     </p>
                 </span>
                 <span
                     class="flex items-center px-4 py-3 hover:bg-gray-100 -mx-2"
                 >
-                    <Badge
-                        success={$queuestate.processing === 0}
-                        errorColor="blue"
-                    />
+                    <Badge success={pState === 0} errorColor="blue" />
                     <p
                         class="
                         text-gray-600 text-sm
@@ -125,14 +137,14 @@
                     "
                     >
                         <span class="font-bold">Processing</span>
-                        <span>{$queuestate.processing} items</span>
+                        <span>{pState} items</span>
                     </p>
                 </span>
                 <span
                     class="flex items-center px-4 py-3 hover:bg-gray-100 -mx-2"
                 >
                     <div class="self-start">
-                        <Badge success={$sslErrors.length === 0} />
+                        <Badge success={errors.length === 0} />
                     </div>
                     <p
                         class="
@@ -144,12 +156,12 @@
                     "
                     >
                         <span class="font-bold"
-                            >{$sslErrors.length === 0
+                            >{errors.length === 0
                                 ? 'No Errors'
                                 : 'Errors'}</span
                         >
                         <span class="block">
-                            {#each $sslErrors as { host, message }}
+                            {#each errors as { host, message }}
                                 <Chip text={host} title={message} />
                             {/each}
                         </span>

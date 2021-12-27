@@ -1,3 +1,5 @@
+import * as crypto from 'crypto';
+
 export interface scdEnvironment {
     hosts?: string[];
     cron?: string;
@@ -6,6 +8,12 @@ export interface scdEnvironment {
     svelte?: {
         outDir?: string;
     };
+    auth?: {
+        username: string;
+        password: string;
+        secret: string;
+    };
+    logger?: string[];
 }
 
 const HOST_LIST: string[] = process.env.HOST_LIST
@@ -21,6 +29,12 @@ let config: scdEnvironment = {
     svelte: {
         outDir: './pages',
     },
+    auth: {
+        username: process.env.USERNAME || 'admin',
+        password: process.env.PASSWORD || 'admin',
+        secret: process.env.SECRET || crypto.randomUUID(),
+    },
+    logger: process.env.LOG_LEVEL?.split(',') || ['error', 'warn'],
 };
 
 if (!config.production) {

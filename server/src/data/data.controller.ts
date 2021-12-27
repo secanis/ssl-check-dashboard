@@ -1,10 +1,12 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import { Controller, Get, Logger, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CronJob } from 'cron';
 
 import { SslCheck } from '../types';
 import { DataService } from './data.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller()
 export class DataController {
     private readonly logger = new Logger(DataController.name);
