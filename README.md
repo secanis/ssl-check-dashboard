@@ -1,5 +1,7 @@
 # ssl-check-dashboard
 
+![Screenshot SSL Dashboard Demo](https://secanis-public-storage.s3.nl-ams.scw.cloud/staticweb/gh/screenshot_ssl_dashboard.png)
+
 ## Get Started
 
 You have two possibilities how you can start/deploy SSL Check Dashboard:
