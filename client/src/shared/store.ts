@@ -1,6 +1,6 @@
 import { writable, Writable } from 'svelte/store';
 
-import { API_URL } from './url';
+import { API_URL, BASE_API_PATH } from './url';
 import type {
     SslError,
     SslCheck,
@@ -31,7 +31,7 @@ export const user = (function () {
             return;
         },
         signin: async (username: string, password: string) => {
-            const res = await fetch(`${API_URL}/api/auth/login`, {
+            const res = await fetch(`${API_URL}${BASE_API_PATH}/auth/login`, {
                 method: 'POST',
                 body: JSON.stringify({
                     username,

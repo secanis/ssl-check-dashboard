@@ -1,6 +1,7 @@
 import { InMemoryDBEntity } from '@nestjs-addons/in-memory-db';
 
-export const WS_PATH = '/api/ws';
+export const BASE_API_PATH = '/api';
+export const WS_PATH = `${BASE_API_PATH}/ws`;
 
 export interface SslCheck extends InMemoryDBEntity {
     host: string;

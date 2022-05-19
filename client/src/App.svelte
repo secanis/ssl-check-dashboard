@@ -10,7 +10,7 @@
 
     import { data, sslErrors, queuestate, user } from './shared/store';
     import { SslCheck, SslError, State } from '~/server/src/types';
-    import { WS_URL } from './shared/url';
+    import { BASE_API_PATH, WS_URL } from './shared/url';
 
     let t: string;
     let loginErr: string;
@@ -18,7 +18,7 @@
         t = state.token;
         if (state.token) {
             const socket = io(WS_URL, {
-                path: '/api/ws',
+                path: `${BASE_API_PATH}/ws`,
                 extraHeaders: {
                     Authorization: `Baerer ${state.token}`,
                 },
