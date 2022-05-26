@@ -67,7 +67,7 @@
                         type="button"
                         title="Logout"
                         on:click={user.signout}
-                        class="bg-gray-700 text-white cursor-pointer relative rounded-full p-2 mr-3 focus:outline-none"
+                        class="bg-gray-700 hover:bg-gray-500 text-white cursor-pointer relative rounded-full p-2 mr-3 focus:outline-none"
                     >
                         <LogoutIcon />
                     </button>
@@ -77,7 +77,7 @@
                         type="button"
                         title="Change Style"
                         on:click={appstate.toggleMinified}
-                        class="bg-gray-700 text-white cursor-pointer relative rounded-full p-2 mr-3 focus:outline-none"
+                        class="bg-gray-700 hover:bg-gray-500 text-white cursor-pointer relative rounded-full p-2 mr-3 focus:outline-none"
                     >
                         {#if $appstate.minified}
                             <MaximizeIcon />

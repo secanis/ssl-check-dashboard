@@ -32,7 +32,7 @@
         if (e.length > 0) return 'bg-red-200 animate-pulse';
         return pState > 0 || qState > 0
             ? 'bg-blue-200 animate-pulse'
-            : 'bg-gray-700';
+            : 'bg-gray-700 hover:bg-gray-500';
     }
 
     function toggleDropdown() {
