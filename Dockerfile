@@ -7,7 +7,7 @@ RUN apk update \
     libstdc++ g++ make python3
 
 COPY . .
-RUN npm install
+RUN npm install --force
 RUN npm run build:server
 RUN npm run build:client
 
@@ -28,7 +28,7 @@ COPY --from=builder /nest/.svelte ./public
 RUN useradd -ms /bin/bash myuser \
     && apt-get update && apt-get install -y --no-install-recommends openssl \
     && rm -rf /var/lib/apt/lists/* \
-    && npm install --production
+    && npm install --production --force
 USER myuser
 
 # HEALTHCHECK --interval=15s --timeout=15s --start-period=5s --retries=3 CMD node healthcheck.js
