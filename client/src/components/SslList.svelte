@@ -3,7 +3,17 @@
 
     import Badge from './Badge.svelte';
     import Chip from './Chip.svelte';
-    import { data, queuestate } from '../shared/store';
+    import { data, queuestate, appstate } from '../shared/store';
+
+    function getDate(from: string, to: string): string {
+        if (from) {
+            return `${new Date(from).toLocaleDateString()} - ${new Date(
+                to
+            ).toLocaleDateString()}`;
+        } else {
+            return 'could not get dates';
+        }
+    }
 </script>
 
 <div class="container my-12 mx-auto px-4 md:px-12">
@@ -37,7 +47,10 @@
                     p-5
                 "
                 >
-                    <div class="header-content flex w-full justify-between">
+                    <div
+                        class="header-content flex w-full justify-between"
+                        title={getDate(d.validFrom, d.validTo)}
+                    >
                         <Badge success={d.valid} />
                         <div class="text-sm">
                             <span
@@ -67,16 +80,11 @@
                         text-base text-justify
                         divide-y divide-solid
                         pb-4
+                        {$appstate.minified ? 'hidden' : ''}
                     "
                     >
                         <span class="mt-1 mb-2 block">
-                            {#if d.validFrom}
-                                {new Date(d.validFrom).toLocaleDateString()}
-                                -
-                                {new Date(d.validTo).toLocaleDateString()}
-                            {:else}
-                                could not get dates
-                            {/if}
+                            {getDate(d.validFrom, d.validTo)}
                         </span>
                         <div class="max-h-5 text-sm">
                             {#if d.state === SslCheckState.OK}
@@ -116,7 +124,8 @@
                 <p>
                     Currently there are no SSL entries we could list.
                     {#if !$queuestate.connected}
-                    <br>There is no connection to the backend, please check that.
+                        <br />There is no connection to the backend, please
+                        check that.
                     {/if}
                 </p>
             </div>

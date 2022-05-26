@@ -26,6 +26,10 @@ export interface State {
     connected?: boolean;
 }
 
+export interface AppState {
+    minified: boolean;
+}
+
 export interface SslError {
     host: string;
     message: string;

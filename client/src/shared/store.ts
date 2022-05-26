@@ -1,4 +1,4 @@
-import { writable, Writable } from 'svelte/store';
+import { writable, Writable, get } from 'svelte/store';
 
 import { API_URL, BASE_API_PATH } from './url';
 import type {
@@ -16,6 +16,18 @@ export const queuestate: Writable<State> = writable({
     connected: false,
 });
 
+export const appstate = (function () {
+    const store = writable({ minified: true });
+    const { subscribe, set } = store;
+
+    return {
+        subscribe,
+        toggleMinified: (): void => {
+            set({ minified: !get(store).minified });
+        },
+    };
+})();
+
 // user
 const emptyUserStore: UserStore = { token: '', error: '' };
 const token = sessionStorage.token;
@@ -23,7 +35,9 @@ export const user = (function () {
     const { subscribe, set } = writable(
         token ? { token, error: '' } : emptyUserStore
     );
+
     subscribe(({ token }) => (sessionStorage.token = token || ''));
+
     return {
         subscribe,
         signout: (): undefined => {
