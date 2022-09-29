@@ -1,0 +1,9 @@
+<app-header
+  [state]="state$ | async"
+  [minimized]="(minimized$ | async)!"
+  (changeMinimized)="changeMinimized$.emit($event)"
+  [showGrid]="(showGrid$ | async)!"
+  (changeShowGrid)="changeShowGrid$.emit($event)"
+></app-header>
+<router-outlet></router-outlet>
+<app-footer></app-footer>

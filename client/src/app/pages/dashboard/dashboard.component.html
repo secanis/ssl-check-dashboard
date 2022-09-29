@@ -1,0 +1,10 @@
+<app-ssl-list
+  *ngIf="(showGrid$ | async)!"
+  [data]="(data$ | async)!"
+  [minimized]="(minimized$ | async)!"
+></app-ssl-list>
+<app-ssl-table
+  *ngIf="!(showGrid$ | async)!"
+  [data]="(data$ | async)!"
+  [minimized]="(minimized$ | async)!"
+></app-ssl-table>

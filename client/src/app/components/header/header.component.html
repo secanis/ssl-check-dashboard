@@ -1,0 +1,53 @@
+<nav class="navbar bg-base-300">
+  <div class="flex-1">
+    <a
+      class="text-sm font-bold leading-relaxed inline-flex mx-4 py-2 whitespace-nowrap uppercase items-center"
+      href="/"
+    >
+      <img class="w-8 h-8" src="assets/ssl-check-dashboard-min.png" />
+      <span class="ml-2">SSL Dashboard</span>
+    </a>
+  </div>
+  <div class="flex-none">
+    <ul
+      class="menu-horizontal p-0 flex items-center space-x-2"
+      *ngIf="showDetailed"
+    >
+      <li>
+        <button
+          class="btn bg-base-100 text-base-content rounded-lg"
+          type="button"
+          title="Logout"
+          (click)="signout()"
+        >
+          <app-logout-icon></app-logout-icon>
+        </button>
+      </li>
+      <li>
+        <button
+          class="btn bg-base-100 text-base-content rounded-lg"
+          type="button"
+          title="Change Style"
+          (click)="minimized$.emit(!minimized)"
+        >
+          <app-maximize-icon *ngIf="minimized"></app-maximize-icon>
+          <app-minimize-icon *ngIf="!minimized"></app-minimize-icon>
+        </button>
+      </li>
+      <li>
+        <button
+          class="btn bg-base-100 text-base-content rounded-lg"
+          type="button"
+          title="Change Style"
+          (click)="showGrid$.emit(!showGrid)"
+        >
+          <app-table-icon *ngIf="showGrid"></app-table-icon>
+          <app-grid-icon *ngIf="!showGrid"></app-grid-icon>
+        </button>
+      </li>
+      <li>
+        <app-info [errors]="errors" [state]="state"></app-info>
+      </li>
+    </ul>
+  </div>
+</nav>

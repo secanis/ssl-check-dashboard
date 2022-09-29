@@ -1,0 +1,49 @@
+<div class="dropdown">
+  <button
+    type="button"
+    title="Status Info"
+    [attr.class]="'btn rounded-lg ' + (pulseColor$ | async)"
+  >
+    <app-bell-icon></app-bell-icon>
+  </button>
+  <div
+    class="menu dropdown-content fixed top-16 right-0 bg-base-300 p-4 w-64 rounded-box shadow-xl"
+  >
+    <div class="text-base-content text-sm w-full flex justify-between my-2">
+      <app-badge [success]="!!state?.connected"></app-badge>
+      <span class="flex-1 inline-block pl-2 font-bold">{{
+        state?.connected ? "Connected" : "Disconnected"
+      }}</span>
+      <span class="flex-1"></span>
+    </div>
+    <div class="text-base-content text-sm w-full flex justify-between my-2">
+      <app-badge [success]="state?.queue === 0" errorColor="info"></app-badge>
+      <span class="flex-1 inline-block pl-2 font-bold">Queue</span>
+      <span class="flex-1 text-right">{{ state?.queue }} items</span>
+    </div>
+    <div class="text-base-content text-sm w-full flex justify-between my-2">
+      <app-badge
+        [success]="state?.processing === 0"
+        errorColor="info"
+      ></app-badge>
+      <span class="flex-1 inline-block pl-2 font-bold">Processing</span>
+      <span class="flex-1 text-right">{{ state?.processing }} items</span>
+    </div>
+    <div class="text-base-content text-sm w-full flex justify-between my-2">
+      <div class="self-start">
+        <app-badge [success]="errors.length === 0"></app-badge>
+      </div>
+      <span class="flex-1 inline-block pl-2 font-bold">{{
+        errors.length === 0 ? "No Errors" : "Errors"
+      }}</span>
+      <span class="block">
+        <app-chip
+          *ngFor="let e of errors"
+          [text]="e.host"
+          [title]="e.message"
+        ></app-chip>
+      </span>
+      <span class="flex-1"></span>
+    </div>
+  </div>
+</div>

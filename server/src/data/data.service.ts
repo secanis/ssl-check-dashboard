@@ -1,10 +1,9 @@
-import { Injectable, Logger, UseGuards } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InMemoryDBService } from '@nestjs-addons/in-memory-db';
-import sslChecker from 'ssl-checker';
 
 import { Server } from 'socket.io';
 import { SslCheck, SslCheckState, SslError } from '../types';
-import { AuthGuard } from '@nestjs/passport';
+import { getSSLCertificateInfo } from './cert-check';
 
 @Injectable()
 export class DataService {
@@ -45,35 +44,45 @@ export class DataService {
                 this.removeFromQueue(hostnameToProcess);
                 this.logger.log(`hostname checked: ${hostnameToProcess}`);
 
-                let result;
+                let result: SslCheck = {
+                    host: hostnameToProcess,
+                    state: SslCheckState.PROCESSING,
+                    message: '',
+                    valid: false,
+                    validFrom: '',
+                    validTo: '',
+                    validationError: null,
+                    daysRemaining: 0,
+                    validFor: [],
+                    id: hostnameToProcess,
+                    usedCipher: {},
+                };
 
                 try {
+                    const res = await getSSLCertificateInfo(hostnameToProcess);
                     result = {
-                        ...(await sslChecker(hostnameToProcess)),
+                        ...res,
                         host: hostnameToProcess,
                         state: SslCheckState.OK,
-                        message: '',
                     };
-
+                    // this.logger.debug(result, result.host);
                     this.removeFromProcessing(hostnameToProcess);
                     this.errors.delete(hostnameToProcess);
-                } catch (e) {
+                } catch (err: any) {
                     result = {
-                        host: hostnameToProcess,
+                        ...result,
                         state: SslCheckState.ERROR,
-                        message: e.message,
-                        valid: false,
-                        validFrom: null,
-                        validTo: null,
-                        daysRemaining: 0,
-                        validFor: [],
+                        message: err.message,
                     };
                     setTimeout(
-                        (_) => this.addToQueue([hostnameToProcess]),
+                        () => this.addToQueue([hostnameToProcess]),
                         30000
                     );
-                    this.errors.set(hostnameToProcess, e.message);
-                    this.logger.warn(e.message, 'could not process, try again');
+                    this.errors.set(hostnameToProcess, err.message);
+                    this.logger.warn(
+                        err.message,
+                        'could not process, try again'
+                    );
                 } finally {
                     this.setItemToDBAndSend(hostnameToProcess, result);
                     const allChecks = this.dbService.getAll();
@@ -116,8 +125,9 @@ export class DataService {
 
     getErrors(): SslError[] {
         return Array.from(this.errors, ([host, message]) => ({
-            host,
-            message,
+            id: host,
+            host: host || 'no host',
+            message: message || 'no message',
         }));
     }
 }

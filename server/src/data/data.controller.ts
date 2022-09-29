@@ -22,7 +22,7 @@ export class DataController {
         this.logger.debug(`configured cron: ${cron}`);
 
         // wait a short time for initializing socket to start the queue
-        setTimeout((_) => this.startQueueCron(hosts, cron), 500);
+        setTimeout(() => this.startQueueCron(hosts, cron), 500);
     }
 
     @Get('/data/queue')
@@ -54,7 +54,7 @@ export class DataController {
             },
             null,
             false,
-            null,
+            undefined,
             null,
             true
         );

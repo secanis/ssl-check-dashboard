@@ -1,0 +1,68 @@
+<div class="container my-12 mx-auto overflow-x-auto">
+  <table class="table table-zebra w-full shadow-xl">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Host</th>
+        <th>Remaining Days</th>
+        <th>Dates</th>
+        <th>Is Valid</th>
+        <th>Cipher</th>
+        <th>Valid For</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d of data">
+        <td>
+          <app-badge
+            [success]="d.valid"
+            [errorText]="d.validationError || ''"
+          ></app-badge>
+        </td>
+        <td>
+          <a class="has-text-white" target="_blank" [attr.href]="'//' + d.host">
+            {{ d.host }}
+          </a>
+        </td>
+        <td>
+          <app-remaining-days
+            [daysRemaining]="d.daysRemaining"
+          ></app-remaining-days>
+        </td>
+        <td>
+          {{ getDate(d.validFrom, d.validTo) }}
+        </td>
+        <td>{{ d.validationError || "certificate valid" }}</td>
+        <td>{{ d.usedCipher.name?.name }} | {{ d.usedCipher.version }}</td>
+        <td>
+          <ng-container *ngIf="d.state === SslCheckState.OK">
+            <div class="flex items-center space-x-2">
+              <app-chip
+                *ngFor="let h of getValidForList(d.validFor)"
+                [text]="h"
+                [title]="h"
+              ></app-chip>
+            </div>
+            {{ moreThanTwo(d.validFor) ? "..." : "" }}
+          </ng-container>
+          <ng-container *ngIf="d.state === SslCheckState.ERROR">
+            <code>
+              {{ d.message }}
+            </code>
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div
+    *ngIf="!data || data?.length === 0"
+    class="w-70 bg-warning text-warning-content mt-8 shadow-lg rounded-lg overflow-hidden min-w-full p-5"
+  >
+    <p>
+      Currently there are no SSL entries we could list.
+      <span *ngIf="!connected"
+        ><br />There is no connection to the backend, please check that.</span
+      >
+    </p>
+  </div>
+</div>
