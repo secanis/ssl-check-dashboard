@@ -3,11 +3,11 @@ import { SslCheck, SslCheckState } from '../../../../../server/src/types';
 import { SslHelper } from 'src/app/shared/helper';
 
 @Component({
-  selector: 'app-ssl-list',
-  templateUrl: './ssl-list.component.html',
-  styleUrls: ['./ssl-list.component.css'],
+  selector: 'app-ssl-grid',
+  templateUrl: './ssl-grid.component.html',
+  styleUrls: ['./ssl-grid.component.css'],
 })
-export class SslListComponent implements OnInit {
+export class SslGridComponent implements OnInit {
   @Input('data') data: SslCheck[] = [];
   @Input('connected') connected = false;
   @Input('minimized') minimized = false;

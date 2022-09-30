@@ -15,7 +15,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { InfoComponent } from './components/info/info.component';
 import { BadgeComponent } from './components/badge/badge.component';
 import { ChipComponent } from './components/chip/chip.component';
-import { SslListComponent } from './components/ssl-list/ssl-list.component';
+import { SslGridComponent } from './components/ssl-grid/ssl-grid.component';
 import { SslTableComponent } from './components/ssl-table/ssl-table.component';
 import { RemainingDaysComponent } from './components/remaining-days/remaining-days.component';
 import { LogoutIconComponent } from './components/icons/logout-icon.component';
@@ -49,7 +49,7 @@ const iconComponents = [
     InfoComponent,
     BadgeComponent,
     ChipComponent,
-    SslListComponent,
+    SslGridComponent,
     SslTableComponent,
     RemainingDaysComponent,
     ...iconComponents,
