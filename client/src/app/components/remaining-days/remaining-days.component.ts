@@ -9,9 +9,9 @@ import { Component, Input, OnInit } from '@angular/core';
           daysRemaining + 'days remaining until the certificate runs out'
         "
         [ngClass]="{
-          'badge-error': daysRemaining < 30,
-          'badge-warning': daysRemaining < 60,
-          'badge-success': daysRemaining > 60
+          'badge-error': daysRemaining < TEN_DAYS,
+          'badge-warning': daysRemaining < THIRTY_DAYS,
+          'badge-success': daysRemaining >= THIRTY_DAYS
         }"
         class="badge p-1 px-2 bg-opacity-80 text-xs"
       >
@@ -23,6 +23,9 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class RemainingDaysComponent implements OnInit {
   @Input('daysRemaining') daysRemaining: number = 0;
+
+  readonly TEN_DAYS = 10;
+  readonly THIRTY_DAYS = 30;
 
   constructor() {}
 
