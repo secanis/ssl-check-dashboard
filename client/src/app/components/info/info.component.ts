@@ -27,7 +27,7 @@ export class InfoComponent implements OnInit {
   getPulseColor(e: SslError[], processing: number): string {
     if (e?.length > 0) return this.DEFAULT_PULSE;
     return processing > 0 || processing > 0
-      ? 'bg-info animate-pulse'
+      ? 'bg-info text-info-content animate-pulse'
       : 'bg-success text-primary-content';
   }
 

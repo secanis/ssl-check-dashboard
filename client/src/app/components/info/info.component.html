@@ -2,7 +2,9 @@
   <button
     type="button"
     title="Status Info"
-    [attr.class]="'btn rounded-lg ' + (pulseColor$ | async)"
+    [attr.class]="
+      'btn rounded-lg hover:text-white border-none ' + (pulseColor$ | async)
+    "
   >
     <app-bell-icon></app-bell-icon>
   </button>

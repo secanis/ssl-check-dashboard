@@ -32,8 +32,13 @@
         <td>
           {{ getDate(d.validFrom, d.validTo) }}
         </td>
-        <td>{{ d.validationError || "certificate valid" }}</td>
-        <td>{{ d.usedCipher.name?.name }} | {{ d.usedCipher.version }}</td>
+        <td>
+          {{ d.validationError || "certificate valid" }}
+        </td>
+        <td>
+          {{ d.usedCipher.name?.name }} {{ d.usedCipher.version ? "|" : "" }}
+          {{ d.usedCipher.version }}
+        </td>
         <td>
           <ng-container *ngIf="d.state === SslCheckState.OK">
             <div class="flex items-center space-x-2">
@@ -42,8 +47,8 @@
                 [text]="h"
                 [title]="h"
               ></app-chip>
+              {{ moreThanTwo(d.validFor) ? "..." : "" }}
             </div>
-            {{ moreThanTwo(d.validFor) ? "..." : "" }}
           </ng-container>
           <ng-container *ngIf="d.state === SslCheckState.ERROR">
             <code>

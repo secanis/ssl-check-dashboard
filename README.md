@@ -73,3 +73,12 @@ It would be very nice, when you give us a feedback or when you create issues if 
 If you want to fix it yourself or you have an idea for something new, please create a PR, that would help us a lot.
 
 Happy Coding <3 ...
+
+### Stack
+
+-   [NestJS](https://nestjs.com/)
+-   [Angular](https://angular.io/)
+-   [Socket.io](https://socket.io/)
+-   [TailwindCSS](https://tailwindcss.com/)
+-   [daisyUI](https://daisyui.com/)
+-   [FeatherIcons](https://feathericons.com/)
