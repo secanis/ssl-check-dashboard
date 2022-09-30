@@ -72,6 +72,8 @@ export class DataService {
                     result = {
                         ...result,
                         state: SslCheckState.ERROR,
+                        valid: false,
+                        validationError: err.message,
                         message: err.message,
                     };
                     setTimeout(
