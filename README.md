@@ -1,6 +1,6 @@
 # ssl-check-dashboard
 
-![Screenshot SSL Dashboard Demo](https://secanis-public-storage.s3.nl-ams.scw.cloud/staticweb/gh/screenshot_ssl_dashboard.png)
+![Screenshot SSL Dashboard Demo](https://secanis-public-storage.s3.nl-ams.scw.cloud/staticweb/gh/screenshot_ssl_dashboard.png?t=1)
 
 ## Get Started
 
