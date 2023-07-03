@@ -33,7 +33,7 @@ ENV NODE_ENV production
 COPY server/package.json server/package-lock.json ./
 RUN apt-get update && apt-get install -y --no-install-recommends openssl \
     && rm -rf /var/lib/apt/lists/* \
-    && npm ci --omit=dev
+    && npm ci --omit=dev --force
 
 COPY --from=builder-server /build/server/.nest ./
 COPY --from=builder-client /build/client/dist/ssl-check-dashboard ./public
