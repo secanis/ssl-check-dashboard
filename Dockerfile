@@ -20,7 +20,7 @@ WORKDIR /build
 
 COPY . .
 WORKDIR /build/server
-RUN npm ci
+RUN npm ci --force
 RUN npm run build
 
 # final image build
