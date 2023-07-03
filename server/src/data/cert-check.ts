@@ -14,6 +14,15 @@ const getDaysRemaining = (validFrom: Date, validTo: Date) => {
     return daysRemaining;
 };
 
+const getAltNames = (crt: any): string[] => {
+    if (crt.subjectaltname)
+        return crt.subjectaltname
+            .split(', ')
+            .map((i: any) => i.replace('DNS:', ''));
+
+    return [crt.subject.CN];
+};
+
 export const getSSLCertificateInfo = (host: string): Promise<SslCheck> => {
     if (!validator.isFQDN(host)) {
         throw new Error('Invalid hostname');
@@ -32,9 +41,7 @@ export const getSSLCertificateInfo = (host: string): Promise<SslCheck> => {
                 const crt = res.connection.getPeerCertificate(),
                     vFrom = crt.valid_from,
                     vTo = crt.valid_to,
-                    altName = crt.subjectaltname
-                        .split(', ')
-                        .map((i: any) => i.replace('DNS:', ''));
+                    altName = getAltNames(crt);
                 const validTo = new Date(vTo);
                 const cipher = res.connection.getCipher();
                 resolve({
