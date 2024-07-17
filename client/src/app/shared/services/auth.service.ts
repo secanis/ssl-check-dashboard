@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { AuthRepository } from '../../state/auth.repository';
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpResponse,
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { getUrlConfig } from '../url';
 import { catchError, tap } from 'rxjs';
 import { UserStore } from '../../../../../server/src/types';

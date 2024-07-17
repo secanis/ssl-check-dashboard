@@ -1,12 +1,12 @@
 # basic
-FROM node:alpine as builder-basic
+FROM node:alpine AS builder-basic
 
 RUN apk update \
     && apk add --no-cache --virtual build-dependencies build-base openssl libgcc \
     libstdc++ g++ make python3
 
 # client build
-FROM builder-basic as builder-client
+FROM builder-basic AS builder-client
 WORKDIR /build
 
 COPY . .
@@ -15,7 +15,7 @@ RUN npm ci
 RUN npm run build:prod
 
 # server build
-FROM builder-basic as builder-server
+FROM builder-basic AS builder-server
 WORKDIR /build
 
 COPY . .
@@ -28,24 +28,24 @@ FROM node:slim
 LABEL maintainer=support@secanis.ch
 
 WORKDIR /app
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 COPY server/package.json server/package-lock.json ./
 RUN apt-get update && apt-get install -y --no-install-recommends openssl \
     && rm -rf /var/lib/apt/lists/* \
-    && npm ci --omit=dev --force
+    && npm ci --omit=dev
 
 COPY --from=builder-server /build/server/.nest ./
-COPY --from=builder-client /build/client/dist/ssl-check-dashboard ./public
+COPY --from=builder-client /build/client/dist/ssl-check-dashboard/browser ./public
 
-# COPY healthcheck.js .
+COPY server/healthcheck.mjs .
 
 RUN useradd -ms /bin/bash myuser
 USER myuser
 
-# HEALTHCHECK --interval=15s --timeout=15s --start-period=5s --retries=3 CMD node healthcheck.js
-
-EXPOSE 3000
 ENV PORT=3000
+EXPOSE 3000
+
+HEALTHCHECK --interval=15s --timeout=15s --start-period=5s --retries=3 CMD node /app/healthcheck.mjs || exit 1
 
 CMD ["node", "main.js"]

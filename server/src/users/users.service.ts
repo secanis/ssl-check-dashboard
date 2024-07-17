@@ -13,13 +13,13 @@ export class UsersService {
         {
             userId: crypto
                 .createHash('sha1')
-                .update(this.configService.get('auth.username'))
+                .update(this.configService.getOrThrow<string>('auth.username'))
                 .digest('hex')
                 .toString(),
             username: this.configService.get('auth.username'),
             password: bcrypt.hashSync(
-                this.configService.get('auth.password'),
-                7
+                this.configService.getOrThrow<string>('auth.password'),
+                7,
             ),
         },
     ];

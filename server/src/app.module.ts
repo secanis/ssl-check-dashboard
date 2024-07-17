@@ -11,6 +11,7 @@ import { AppService } from './app.service';
 import { DataModule } from './data/data.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
 
 @Module({
     imports: [
@@ -21,6 +22,7 @@ import { UsersModule } from './users/users.module';
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, 'public'),
         }),
+        GracefulShutdownModule.forRoot(),
         DataModule,
         AuthModule,
         UsersModule,

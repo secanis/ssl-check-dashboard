@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { SocketIoModule } from 'ngx-socket-io';
 
@@ -37,31 +37,24 @@ const iconComponents = [
   GridIconComponent,
 ];
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    DashboardComponent,
-    LoginComponent,
-    FooterComponent,
-    AuthLayoutComponent,
-    AppLayoutComponent,
-    HeaderComponent,
-    InfoComponent,
-    BadgeComponent,
-    ChipComponent,
-    SslGridComponent,
-    SslTableComponent,
-    RemainingDaysComponent,
-    ...iconComponents,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    SocketIoModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        DashboardComponent,
+        LoginComponent,
+        FooterComponent,
+        AuthLayoutComponent,
+        AppLayoutComponent,
+        HeaderComponent,
+        InfoComponent,
+        BadgeComponent,
+        ChipComponent,
+        SslGridComponent,
+        SslTableComponent,
+        RemainingDaysComponent,
+        ...iconComponents,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        SocketIoModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {}

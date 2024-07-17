@@ -60,8 +60,8 @@ export const getSSLCertificateInfo = (host: string): Promise<SslCheck> => {
             });
             req.on('error', reject);
             req.end();
-        } catch (e) {
-            reject(e);
+        } catch (e: any) {
+            reject(new Error(e?.message ?? e.toString()));
         }
     });
 };

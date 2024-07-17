@@ -1,23 +1,25 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { InMemoryDBService } from '@nestjs-addons/in-memory-db';
+import { Injectable, Logger, OnApplicationShutdown } from '@nestjs/common';
 
 import { Server } from 'socket.io';
 import { SslCheck, SslCheckState, SslError } from '../types';
 import { getSSLCertificateInfo } from './cert-check';
 
 @Injectable()
-export class DataService {
+export class DataService implements OnApplicationShutdown {
     private readonly logger = new Logger(DataService.name);
+    private inMemoryDb = new Map<string, SslCheck>();
+
     currentState: { queue: Set<string>; processing: Set<string> } = {
         queue: new Set(),
         processing: new Set(),
     };
 
     private errors: Map<string, string | null> = new Map();
-    socket: Server;
+    socket: Server = new Server();
 
-    constructor(private readonly dbService: InMemoryDBService<SslCheck>) {
-        this.processQueue();
+    constructor() {
+        // initial timeout to start the queue
+        setTimeout(() => this.processQueue(), 5000);
     }
 
     addToQueue(hostnames: string[]) {
@@ -78,16 +80,18 @@ export class DataService {
                     };
                     setTimeout(
                         () => this.addToQueue([hostnameToProcess]),
-                        30000
+                        30000,
                     );
                     this.errors.set(hostnameToProcess, err.message);
                     this.logger.warn(
                         err.message,
-                        'could not process, try again'
+                        'could not process, try again',
                     );
                 } finally {
                     this.setItemToDBAndSend(hostnameToProcess, result);
-                    const allChecks = this.dbService.getAll();
+                    const allChecks: SslCheck[] = Array.from(
+                        this.inMemoryDb.values(),
+                    );
                     this.socket.emit('data', allChecks);
                     this.emitErrors();
                 }
@@ -96,12 +100,12 @@ export class DataService {
     }
 
     setItemToDBAndSend(host: string, result: SslCheck) {
-        const existing = this.dbService.query((record) => record.host === host);
+        const existing = this.inMemoryDb.get(host);
 
-        if (existing.length > 0) {
-            this.dbService.update({ ...existing[0], ...result });
+        if (existing) {
+            this.inMemoryDb.set(host, { ...existing, ...result });
         } else {
-            this.dbService.create(result);
+            this.inMemoryDb.set(host, result);
         }
     }
 
@@ -121,15 +125,19 @@ export class DataService {
         this.socket.emit('sslerrors', errs);
     }
 
-    getCurrentResults() {
-        return this.dbService.getAll();
+    getCurrentResults(): SslCheck[] {
+        return Array.from(this.inMemoryDb.values());
     }
 
     getErrors(): SslError[] {
         return Array.from(this.errors, ([host, message]) => ({
             id: host,
             host: host || 'no host',
-            message: message || 'no message',
+            message: message ?? 'no message',
         }));
+    }
+
+    onApplicationShutdown() {
+        this.socket.disconnectSockets();
     }
 }

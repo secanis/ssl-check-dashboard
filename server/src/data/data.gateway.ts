@@ -7,13 +7,12 @@ import {
     WebSocketGateway,
     WebSocketServer,
 } from '@nestjs/websockets';
-import { Logger, UseGuards } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 
 import { DataService } from './data.service';
 import { WS_PATH } from '../types';
 import { AuthService } from '../auth/auth.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @WebSocketGateway({
     cors: { origin: '*' },
@@ -22,11 +21,11 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 export class DataGateway implements OnGatewayInit, OnGatewayConnection {
     constructor(
         private readonly dataService: DataService,
-        private readonly authService: AuthService
+        private readonly authService: AuthService,
     ) {}
 
     @WebSocketServer()
-    server: Server;
+    server: Server = new Server();
 
     private logger: Logger = new Logger('AppGateway');
 
@@ -47,7 +46,7 @@ export class DataGateway implements OnGatewayInit, OnGatewayConnection {
     @SubscribeMessage('events')
     async handleSslDataEvent(
         @MessageBody() data: string,
-        @ConnectedSocket() client: Socket
+        @ConnectedSocket() client: Socket,
     ): Promise<void> {
         this.checkAuthorization(client);
         this.dataService.emitState();

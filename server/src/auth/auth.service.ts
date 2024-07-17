@@ -9,7 +9,7 @@ export class AuthService {
 
     constructor(
         private readonly usersService: UsersService,
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
     ) {}
 
     async validateUser(username: string, pass: string): Promise<any> {
@@ -17,6 +17,8 @@ export class AuthService {
         if (user && bcrypt.compareSync(pass, user.password)) {
             const { password, ...result } = user;
             return result;
+        } else {
+            this.logger.warn('Login failed');
         }
         return null;
     }
@@ -32,7 +34,7 @@ export class AuthService {
         try {
             if (authToken) {
                 return !!this.jwtService.verify(
-                    authToken.replace('Baerer ', '')
+                    authToken.replace('Baerer ', ''),
                 );
             }
         } catch (e) {

@@ -13,7 +13,7 @@ export class DataController {
 
     constructor(
         private readonly dataService: DataService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
     ) {
         const hosts = this.configService.get('hosts');
         const cron = this.configService.get('cron');
@@ -37,7 +37,7 @@ export class DataController {
 
     @Get('/data/cache')
     async getCache(): Promise<SslCheck[]> {
-        return await this.dataService.getCurrentResults();
+        return this.dataService.getCurrentResults();
     }
 
     @Get('/socket')
@@ -56,7 +56,7 @@ export class DataController {
             false,
             undefined,
             null,
-            true
+            true,
         );
         job.start();
     }
